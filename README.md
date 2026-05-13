@@ -28,11 +28,9 @@ The original repository is private because it contains active product code, Supa
 
 ## Screenshots
 
-Screenshots are intentionally placeholders until final UI assets are approved for public sharing.
-
-| Dashboard | Appointments | Public Catalog |
+| Dashboard | Appointments | Inventory |
 |---|---|---|
-| `screenshots/dashboard.png` | `screenshots/appointments.png` | `screenshots/public-catalog.png` |
+| ![NailDash dashboard with revenue KPIs, chart, and upcoming appointments](screenshots/dashboard.png) | ![NailDash appointments calendar with monthly view and appointment detail](screenshots/appointments.png) | ![NailDash color inventory with availability filters and stock status](screenshots/inventory.png) |
 
 ## Architecture
 
