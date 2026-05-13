@@ -249,6 +249,39 @@ The app is built around a user-owned data model. Core tables include `user_id` a
 
 The Paddle webhook function handles subscription lifecycle events and writes normalized subscription data into Supabase. It also keeps a legacy/profile-level subscription status in sync so older UI paths remain compatible while the billing system evolves.
 
+### Paddle Webhook Signature Verification
+
+Payment webhooks are treated as untrusted input until Paddle's signature is verified. The Edge Function reads the raw request body, checks the `Paddle-Signature` header, selects the correct webhook secret for the current environment (`sandbox` or `production`), and fails closed before touching subscription data.
+
+```ts
+async function handleWebhook(req: Request, env: PaddleEnv) {
+  const signature = req.headers.get("Paddle-Signature");
+  if (!signature) {
+    return new Response("Missing webhook signature", { status: 400 });
+  }
+
+  const rawBody = await req.text();
+  const webhookSecret = env === "production"
+    ? Deno.env.get("PADDLE_WEBHOOK_SECRET_PROD")
+    : Deno.env.get("PADDLE_WEBHOOK_SECRET_SANDBOX");
+
+  if (!webhookSecret) {
+    return new Response("Webhook secret not configured", { status: 500 });
+  }
+
+  const event = await verifyPaddleSignature({
+    rawBody,
+    signature,
+    webhookSecret,
+  });
+
+  await syncSubscriptionEvent(event, env);
+  return new Response(JSON.stringify({ received: true }), { status: 200 });
+}
+```
+
+The important detail is preserving the raw payload before JSON parsing. Signature verification must happen first; otherwise an attacker could forge subscription status changes or activate paid features without a valid Paddle event.
+
 ### Appointment Completion Workflow
 
 Appointments are not just calendar items. They drive finance/revenue reporting, client history, and inventory color usage. The UI includes overdue appointment prompts to help studio owners complete records and keep analytics accurate.
