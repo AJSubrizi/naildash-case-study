@@ -8,6 +8,10 @@
 [![Supabase](https://img.shields.io/badge/Supabase-Backend-3ECF8E)](https://supabase.com/)
 [![Paddle](https://img.shields.io/badge/Paddle-Billing-111827)](https://www.paddle.com/)
 [![Playwright](https://img.shields.io/badge/Playwright-E2E-2EAD33)](https://playwright.dev/)
+## 🏗️ NailDash — SaaS Platform
+
+**Live Production App:** [https://naildash.it](https://naildash.it)  
+**Status:** 🚀 Active | Serving real-world beauty studios
 
 ## Overview
 
